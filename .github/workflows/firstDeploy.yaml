@@ -12,13 +12,15 @@ jobs:
       - name: configure ssh connection
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
+        run: | 
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           ssh-keyscan -t rsa ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
           eval "$(ssh-agent -a $SSH_AUTH_SOCK)"
-          echo "${{ secrets.SSH_KEY }}" | ssh-add -
+          printf "%s\n" "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa
       - name: Deploy
         run: npm run deploy
         env:
