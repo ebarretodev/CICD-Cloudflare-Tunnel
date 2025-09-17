@@ -35,9 +35,13 @@ jobs:
 
           chmod 600 ~/.ssh/config
 
+          cat ~/.ssh/config
+
           # adiciona host no known_hosts
-          ssh-keyscan -t ed25519 ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+
+          cat ~/.ssh/known_hosts
+
 
           # inicia o agente e adiciona a chave
           eval "$(ssh-agent -a $SSH_AUTH_SOCK)"
