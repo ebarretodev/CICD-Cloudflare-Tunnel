@@ -11,10 +11,8 @@ jobs:
       - name: Npm Install
         run: npm i
 
-      - name: Configure SSH connection
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: | 
+      - name: Configure SSH with Cloudflare Access
+        run: |
           set -x
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
@@ -23,33 +21,23 @@ jobs:
           curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -o cloudflared.deb
           sudo dpkg -i cloudflared.deb
 
-          # cria config SSH usando ProxyCommand via cloudflared
+          # cria config SSH usando ProxyCommand com cloudflared
           cat <<EOF > ~/.ssh/config
           Host ${{ secrets.SSH_HOST }}
             HostName ${{ secrets.SSH_HOST }}
             User ${{ secrets.SSH_USER }}
-            IdentityFile ~/.ssh/id_ed25519
             ProxyCommand cloudflared access ssh --hostname ${{ secrets.SSH_HOST }}
             IdentitiesOnly yes
           EOF
 
           chmod 600 ~/.ssh/config
-
-          cat ~/.ssh/config
-
-          # adiciona host no known_hosts
-          echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
-
-          cat ~/.ssh/known_hosts
-
-          # adiciona a chave
-          echo "${{ secrets.secrets.SSH_KEY }}" >> ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+         
           
       - name: Deploy
         run: | 
           set -x
           npm run deploy
         env:
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
           DOCKER_HOST: ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
