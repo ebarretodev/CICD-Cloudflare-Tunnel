@@ -19,16 +19,6 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          # adiciona host no known_hosts
-          ssh-keyscan -t ed25519 ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-
-          # inicia o agente e adiciona a chave
-          eval "$(ssh-agent -a $SSH_AUTH_SOCK)"
-          printf "%s\n" "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-add ~/.ssh/id_ed25519
-
           # instala o cloudflared
           curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -o cloudflared.deb
           sudo dpkg -i cloudflared.deb
@@ -44,6 +34,18 @@ jobs:
           EOF
 
           chmod 600 ~/.ssh/config
+
+          # adiciona host no known_hosts
+          ssh-keyscan -t ed25519 ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+          # inicia o agente e adiciona a chave
+          eval "$(ssh-agent -a $SSH_AUTH_SOCK)"
+          printf "%s\n" "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-add ~/.ssh/id_ed25519
+
+          
 
       - name: Deploy
         run: npm run deploy
