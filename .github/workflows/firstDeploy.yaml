@@ -26,7 +26,7 @@ jobs:
           Host ${{ secrets.SSH_HOST }}
             HostName ${{ secrets.SSH_HOST }}
             User ${{ secrets.SSH_USER }}
-            ProxyCommand cloudflared access ssh --hostname ${{ secrets.SSH_HOST }}
+            ProxyCommand cloudflared access ssh --hostname ${{ secrets.SSH_HOST }} --id ${{ secrets.CF_ACCESS_CLIENT_ID }} --secret ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
             IdentitiesOnly yes
           EOF
 
@@ -38,6 +38,4 @@ jobs:
           set -x
           npm run deploy
         env:
-          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
-          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
           DOCKER_HOST: ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
