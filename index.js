@@ -5,7 +5,7 @@ const app = express();
 const port = 3000
 
 app.get('/', (req, res) => {
-    res.send('Eu te amo THAINARA, minha linda.')
+    res.send('Hello World! Atualizado pela Pipeline do Github e deploy direto no Raspberry Pi com Docker pelo Cloudflare Tunnel!')
 })
 
 app.listen(port, () => {
