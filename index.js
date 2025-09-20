@@ -5,7 +5,7 @@ const app = express();
 const port = 3000
 
 app.get('/', (req, res) => {
-    res.send('Hello World!\n Teste Primeiro deploy pela pipeline do Github no dns do cloudflare')
+    res.send('Eu te amo THAINARA, minha linda.')
 })
 
 app.listen(port, () => {
