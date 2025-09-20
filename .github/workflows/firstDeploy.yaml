@@ -26,7 +26,7 @@ jobs:
           Host ${{ secrets.SSH_HOST }}
             HostName ${{ secrets.SSH_HOST }}
             User ${{ secrets.SSH_USER }}
-            ProxyCommand cloudflared access ssh --hostname ${{ secrets.SSH_HOST }} --id ${{ secrets.CF_ACCESS_CLIENT_ID }} --secret ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+            ProxyCommand cloudflared --loglevel debug access ssh --hostname ${{ secrets.SSH_HOST }} --id ${{ secrets.CF_ACCESS_CLIENT_ID }} --secret ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
             IdentitiesOnly yes
             ConnectTimeout 10
           EOF
