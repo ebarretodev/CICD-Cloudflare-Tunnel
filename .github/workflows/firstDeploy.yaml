@@ -28,6 +28,7 @@ jobs:
             User ${{ secrets.SSH_USER }}
             ProxyCommand cloudflared access ssh --hostname ${{ secrets.SSH_HOST }} --id ${{ secrets.CF_ACCESS_CLIENT_ID }} --secret ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
             IdentitiesOnly yes
+            ConnectTimeout 10
           EOF
 
           chmod 600 ~/.ssh/config
