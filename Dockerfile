@@ -1,4 +1,4 @@
-FROM docker.io/library/node:lts-alpine
+FROM gcr.io/library/node:lts-alpine
 
 WORKDIR /usr/src/app
 
